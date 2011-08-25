@@ -4,6 +4,10 @@ To install this, copy this folder to /usr/lib/php (if you cannot see it in finde
 
 Now in terminal type: alias ft=/usr/lib/php/ForkTool/ft.sh
 
+To use this permanently, type vi ~/.bash_profile and add the previous piece of code. (You can insert code by pressing i)
+
+Now quit vi (press escape, type : and enter wq) and type source ~/.bash_profile
+
 To use this (currently you can only create modules) type:
 
 ft module modulename
