@@ -89,7 +89,7 @@ class FT
 		if(empty($posDefWWW) && empty($posDefLib))
 		{
 			// is there a library path and default_www path available?
-			if(!is_dir($this->workingDir . '/default_www') || !is_dir($this->workingDir . '/library')) print "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n";
+			if(!is_dir($this->workingDir . '/default_www') || !is_dir($this->workingDir . '/library')) print "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n"; exit;
 
 			// create working paths
 			$this->frontendPath = $this->workingDir . '/default_www/frontend/';
