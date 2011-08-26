@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class for generating a module
+ * Class for generating an action
  *
  * @author	Jelmer Snoeck <jelmer.snoeck@netlash.com>
  *
@@ -13,7 +13,7 @@ class ModuleGenerator
 	 *
 	 * @var	string
 	 */
-	private $module;
+	private $module, $actionname, $location, $workingDir;
 
 	/**
 	 * Start the widget generator
@@ -21,40 +21,84 @@ class ModuleGenerator
 	 * @param 	string $module		The module name.
 	 * @param	string $this->module		The name the widget should have.
 	 */
-	public function __construct($module)
+	public function __construct($module, $location, $actionname)
 	{
-		// check if the widget doesn't exists to continue
-		if(!is_dir(FRONTENDPATH . 'modules/' . $module))
+		echo 'test';
+		// set variables
+		$this->module = (string) strtolower($module);
+		$this->file = (string) strtolower($actionname);
+		$this->location = (string) strtolower($location);
+
+		// create valid name
+		$this->createName();
+
+		// do some checks
+		if(!is_dir(FRONTENDPATH . 'modules/' . $this->module) && !is_dir(BACKENDPATH . 'modules.' . $this->module))
 		{
-			// set variables
-			$this->module = $module;
+			"This is not an existing module. \n";
+			exit;
+		}
+		if($this->location != 'frontend' && $this->location != 'backend')
+		{
+			"Please specify if you want to create this action in the frontend or backend. \n";
+			exit;
+		}
 
-			// build the backend
-			$this->buildBackend();
+		// check if we need to work in the frontend or backend
+		$this->getWorkingDir();
 
-			// build the frontend
-			$this->buildFrontend();
-
+		// check if the widget doesn't exists to continue
+		if(!is_dir($this->workingDir . 'actions/' . $this->filename . '.php'))
+		{
 			// create the action
-			$this->createAction();
-
-			// create the models
-			$this->createModel();
-
-			// create the configs
-			$this->createConfig();
-
-			// create the installer
-			$this->createInstaller();
+			//$this->createAction();
 
 			// create template
-			$this->createTemplate();
+			//$this->createTemplate();
 
 			// widget created
-			echo "The module '$this->module' is created.\n";
+			echo "The action '$this->actionname' is created.\n";
 		}
 		// widget exists
-		else echo "The module already exists.\n";
+		else echo "The action already exists.\n";
+	}
+
+	/**
+	 * Creates a valid name
+	 *
+	 * @return	void
+	 */
+	private function createName()
+	{
+		// are there any underscores?
+		if(strpos($this->filename, '_') > 0)
+		{
+			// temporary string
+			$tempStr = '';
+
+			// temporary names
+			$tempNames = explode('_', $this->filename);
+
+			// uppercase it
+			foreach($tempNames as $name) $tempStr.= ucfirst($name);
+
+			// reassign
+			$this->actionname = $tempStr;
+		}
+	}
+
+	/**
+	 * Sets the right path to work in (frontend/backend)
+	 *
+	 * @return	void
+	 */
+	private function getWorkingDir()
+	{
+		// create temporary path
+		$tempPath = ($this->location == 'frontend') ? FRONTENDPATH : BACKENDPATH;
+
+		// set working dir
+		$this->workingDir = $tempPath . 'modules/';
 	}
 
 	/**
