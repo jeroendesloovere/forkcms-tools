@@ -29,6 +29,20 @@ class FT
 	private $argv;
 
 	/**
+	 * Create Widget
+	 *
+	 * @return	void
+	 */
+	private function createAction($module, $location, $name)
+	{
+		// require the widget generator
+		require_once $this->cliPath . 'action/generator.php';
+
+		// make widget
+		$action = new ActionGenerator($module, $location, $name);
+	}
+
+	/**
 	 * Create a new module
 	 *
 	 * @return	void
@@ -89,8 +103,11 @@ class FT
 		if(empty($posDefWWW) && empty($posDefLib))
 		{
 			// is there a library path and default_www path available?
-			if(!is_dir($this->workingDir . '/default_www') || !is_dir($this->workingDir . '/library')) print "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n"; exit;
-
+			if(!is_dir($this->workingDir . '/default_www') && !is_dir($this->workingDir . '/library'))
+			{
+				echo "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n";
+				exit;
+			}
 			// create working paths
 			$this->frontendPath = $this->workingDir . '/default_www/frontend/';
 			$this->backendPath = $this->workingDir . '/default_www/backend/';
@@ -140,6 +157,9 @@ class FT
 			case 'widget':
 				$this->createWidget($this->argv[2], $this->argv[3]);
 			break;
+			case 'action':
+				$this->createAction($this->argv[2], $this->argv[3], $this->argv[4]);
+			break;
 			default:
 				echo "Not a valid action.\n";
 				exit;
@@ -154,7 +174,6 @@ class FT
 	 */
 	public static function start($argv)
 	{
-
 		// are there any arguments given?
 		if(count($argv) < 3) exit;
 
