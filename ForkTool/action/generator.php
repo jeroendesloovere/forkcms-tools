@@ -6,14 +6,14 @@
  * @author	Jelmer Snoeck <jelmer.snoeck@netlash.com>
  *
  */
-class ModuleGenerator
+class ActionGenerator
 {
 	/**
 	 * The values
 	 *
 	 * @var	string
 	 */
-	private $module, $actionname, $location, $workingDir;
+	private $module, $actionname, $location, $workingDir, $filename;
 
 	/**
 	 * Start the widget generator
@@ -23,44 +23,52 @@ class ModuleGenerator
 	 */
 	public function __construct($module, $location, $actionname)
 	{
-		echo 'test';
 		// set variables
 		$this->module = (string) strtolower($module);
-		$this->file = (string) strtolower($actionname);
+		$this->filename = (string) strtolower($actionname);
 		$this->location = (string) strtolower($location);
 
 		// create valid name
 		$this->createName();
-
-		// do some checks
-		if(!is_dir(FRONTENDPATH . 'modules/' . $this->module) && !is_dir(BACKENDPATH . 'modules.' . $this->module))
-		{
-			"This is not an existing module. \n";
-			exit;
-		}
-		if($this->location != 'frontend' && $this->location != 'backend')
-		{
-			"Please specify if you want to create this action in the frontend or backend. \n";
-			exit;
-		}
-
-		// check if we need to work in the frontend or backend
-		$this->getWorkingDir();
+		// check the paths
+		$this->checkPaths();
 
 		// check if the widget doesn't exists to continue
-		if(!is_dir($this->workingDir . 'actions/' . $this->filename . '.php'))
+		if(!file_exists($this->workingDir . $this->module . '/actions/' . $this->filename . '.php'))
 		{
 			// create the action
-			//$this->createAction();
-
-			// create template
-			//$this->createTemplate();
+			$this->createAction();
 
 			// widget created
 			echo "The action '$this->actionname' is created.\n";
 		}
 		// widget exists
 		else echo "The action already exists.\n";
+	}
+
+	/**
+	 * Checks if the paths are right
+	 */
+	private function checkPaths()
+	{
+		// check if the location is right
+		if($this->location != 'frontend' && $this->location != 'backend')
+		{
+			"Please specify if you want to create this action in the frontend or backend. \n";
+			echo "--------------------------------------------------------------------------------------------------\n";
+			exit;
+		}
+
+		// get the working dir
+		$this->getWorkingDir();
+
+		// check if the module is set
+		if(!is_dir($this->workingDir . $this->module))
+		{
+			echo "This is not an existing module. \n";
+			echo "--------------------------------------------------------------------------------------------------\n";
+			exit;
+		}
 	}
 
 	/**
@@ -85,6 +93,8 @@ class ModuleGenerator
 			// reassign
 			$this->actionname = $tempStr;
 		}
+		// no underscores
+		else $this->actionname = ucfirst($this->filename);
 	}
 
 	/**
@@ -102,117 +112,53 @@ class ModuleGenerator
 	}
 
 	/**
-	 * Build the backend
-	 *
-	 * @return	void
-	 */
-	private function buildBackend()
-	{
-		// make backend dirs
-		mkdir(BACKENDPATH . 'modules/' . $this->module);
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/actions');
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/engine');
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/installer');
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/installer/data');
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/layout');
-		mkdir(BACKENDPATH . 'modules/' . $this->module . '/layout/templates');
-	}
-
-	/**
-	 * Build the frontend
-	 *
-	 * @return	void
-	 */
-	private function buildFrontend()
-	{
-		// make frontend
-		mkdir(FRONTENDPATH . 'modules/' . $this->module);
-		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/actions');
-		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/engine');
-		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout');
-		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates');
-
-	}
-
-	/**
-	 * Create action
+	 * Create the action files
 	 *
 	 * @return	void
 	 */
 	private function createAction()
 	{
-		// index action template
-		$modTemplate = CLIPATH . 'module/bases/backend/index.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		// load the base file
+		$acBaseFile = CLIPATH . 'action/bases/' . $this->location . '/base.php';
+		$fhBaseFile = fopen($acBaseFile, "r");
 
-		// create index action
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/actions/index.php', 'w');
-		fwrite($modFile, $tdModTemplate);
+		// replace parameters for the frontend
+		if($this->location == 'frontend')
+		{
+			// generate replacement names
+			$className = 'Frontend' . ucfirst($this->module) . $this->actionname;
+			$extensionName = 'FrontendBaseBlock';
+		}
+		// replace parameters for the backend
+		elseif($this->location == 'backend')
+		{
+			// generate replacement names
+			$className = 'Backend' . ucfirst($this->module) . $this->actionname;
+			$extensionName = 'BackendBaseAction';
 
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
+			// check if we need to add some additional info tot he extension
+			$lcAction = strtolower($this->actionname);
+			if($lcAction == 'edit' || $lcAction == 'delete' || $lcAction == 'add' || $lcAction == 'index') $extensionName.= $this->actionname;
+		}
 
-		// index action template
-		$modTemplate = CLIPATH . 'module/bases/frontend/index.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		// start replacement
+		$fhRepFile = fread($fhBaseFile, filesize($acBaseFile));
+		$fhRepFile = str_replace('classname', $className, $fhRepFile);
+		$fhRepFile = str_replace('actionname', strtolower($this->actionname), $fhRepFile);
+		$fhRepFile = str_replace('modulename', $this->module, $fhRepFile);
+		$fhRepFile = str_replace('extension', $extensionName, $fhRepFile);
 
-		// create index action
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/actions/index.php', 'w');
-		fwrite($modFile, $tdModTemplate);
+		// create new file
+		$acFile = fopen($this->workingDir . $this->module . '/actions/' . $this->filename . '.php', 'w');
+		fwrite($acFile, $fhRepFile);
 
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
+		// close the files
+		fclose($acFile);
+		fclose($fhBaseFile);
 	}
 
 	/**
-	 * Create model
-	 *
-	 * @return	void
-	 */
-	private function createModel()
-	{
-		// module template
-		$modTemplate = CLIPATH . 'module/bases/backend/model.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create model
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-
-
-		// module template
-		$modTemplate = CLIPATH . 'module/bases/frontend/model.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create model
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-	}
-
-	/**
-	 * Make names
+	 * Make the template file
 	 *
 	 * @return	void
 	 */
@@ -239,67 +185,6 @@ class ModuleGenerator
 
 		// close file
 		fclose($modFile);
-	}
-
-	/**
-	 * Create config
-	 *
-	 * @return	void
-	 */
-	private function createConfig()
-	{
-		// config template
-		$modTemplate = CLIPATH . 'module/bases/backend/config.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create config
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/config.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-
-		// module template
-		$modTemplate = CLIPATH . 'module/bases/frontend/config.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create model
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/config.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-	}
-
-	/**
-	 * Create installer
-	 *
-	 * @return	void
-	 */
-	private function createInstaller()
-	{
-		// install template
-		$modTemplate = CLIPATH . 'module/bases/backend/install.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create installer
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/installer/install.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
 	}
 }
 
