@@ -155,6 +155,9 @@ class ActionGenerator
 		// close the files
 		fclose($acFile);
 		fclose($fhBaseFile);
+
+		// create the template for the action
+		$this->createTemplate();
 	}
 
 	/**
@@ -164,27 +167,12 @@ class ActionGenerator
 	 */
 	private function createTemplate()
 	{
-		// index action template
-		$modTemplate = CLIPATH . 'module/bases/backend/index.tpl';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
 		// create index template
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
-		fwrite($modFile, $tdModTemplate);
+		$acFile = fopen($this->workingDir . $this->module . '/layout/templates/' . $this->filename . '.tpl', 'w');
+		fwrite($acFile, '');
 
 		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-
-		// create index template
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
-		fwrite($modFile, '');
-
-		// close file
-		fclose($modFile);
+		fclose($acFile);
 	}
 }
 
