@@ -255,6 +255,28 @@ class ModuleGenerator
 		// close files
 		fclose($modFile);
 		fclose($fhModTemplate);
+
+		// create locale
+		$modTemplate = CLIPATH . 'module/bases/backend/locale.xml';
+		$fhModTemplate = fopen($modTemplate, "r");
+		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
+		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
+		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+
+		// create installer
+		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/installer/data/locale.xml', 'w');
+		fwrite($modFile, $tdModTemplate);
+
+		// close files
+		fclose($modFile);
+		fclose($fhModTemplate);
+
+		// create installer
+		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/installer/data/install.sql', 'w');
+		fwrite($modFile, '');
+
+		// close files
+		fclose($modFile);
 	}
 }
 

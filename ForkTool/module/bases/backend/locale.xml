@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale>
+  <backend>
+    <tempname>
+    </tempname>
+    <core>
+     <item type="label" name="tempnameuc">
+        <translation language="nl"><![CDATA[tempname]]></translation>
+        <translation language="en"><![CDATA[tempname]]></translation>
+      </item>
+    </core>
+  </backend>
+  <frontend>
+    <core>
+    </core>
+  </frontend>
+</locale>
