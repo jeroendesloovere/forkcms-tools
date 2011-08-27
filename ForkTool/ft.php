@@ -106,6 +106,7 @@ class FT
 			if(!is_dir($this->workingDir . '/default_www') && !is_dir($this->workingDir . '/library'))
 			{
 				echo "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n";
+				echo "--------------------------------------------------------------------------------------------------\n";
 				exit;
 			}
 			// create working paths
@@ -124,9 +125,17 @@ class FT
 			$workingDir = $workingDir[0];
 
 			// create paths
-			$this->frontendPath = $this->workingDir . '/default_www/frontend/';
-			$this->backendPath = $this->workingDir . '/default_www/backend/';
-			$this->libraryPath = $this->workingDir . '/library/';
+			$this->frontendPath = $workingDir . 'default_www/frontend/';
+			$this->backendPath = $workingDir . 'default_www/backend/';
+			$this->libraryPath = $workingDir . 'library/';
+		}
+
+		// check if the frontend and backend exist (old fork doesn't have this)
+		if(!is_dir($this->frontendPath) || !is_dir($this->backendPath))
+		{
+			echo "This is an older version of Fork. The Fork tool only works with V2+.\n";
+			echo "--------------------------------------------------------------------------------------------------\n";
+			exit;
 		}
 
 		// create real cli path
@@ -155,10 +164,24 @@ class FT
 				$this->createModule($this->argv[2]);
 			break;
 			case 'widget':
+				if(count($this->argv) <= 3)
+				{
+					echo "We expect 2 parameters to create a widget. The module and the widget name. Example:\n";
+					echo "ft widget blog show_most_related\n";
+					echo "--------------------------------------------------------------------------------------------------\n";
+					exit;
+				}
 				$this->createWidget($this->argv[2], $this->argv[3]);
 			break;
 			case 'action':
-				$this->createAction($this->argv[2], $this->argv[3], $this->argv[4]);
+				if(count($this->argv) <= 4)
+				{
+					echo "We expect 3 parameters to create an action. The location, the module and the action name. Example:\n";
+					echo "ft action backend blog edit\n";
+					echo "--------------------------------------------------------------------------------------------------\n";
+					exit;
+				}
+				$this->createAction($this->argv[3], $this->argv[2], $this->argv[4]);
 			break;
 			default:
 				echo "Not a valid action.\n";
@@ -174,6 +197,8 @@ class FT
 	 */
 	public static function start($argv)
 	{
+		echo "--------------------------------------------------------------------------------------------------\n";
+
 		// are there any arguments given?
 		if(count($argv) < 3) exit;
 
@@ -185,6 +210,8 @@ class FT
 
 		// execute the fork tool
 		$ft->execute();
+
+		echo "--------------------------------------------------------------------------------------------------\n";
 	}
 }
 

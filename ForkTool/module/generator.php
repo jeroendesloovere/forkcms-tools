@@ -87,7 +87,6 @@ class ModuleGenerator
 		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/engine');
 		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout');
 		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates');
-
 	}
 
 	/**
