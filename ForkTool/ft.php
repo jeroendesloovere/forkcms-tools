@@ -158,8 +158,13 @@ class FT
 			$this->basePath = $workingDir;
 		}
 
+		// read the version
+		$oVersion = fopen($this->basePath . 'VERSION.md', 'r');
+		$rVersion = fread($oVersion, filesize($this->basePath . 'VERSION.md'));
+		$rVersion = (int) str_replace('.', '', $rVersion);
+
 		// check if the frontend and backend exist (old fork doesn't have this)
-		if(!is_dir($this->frontendPath) || !is_dir($this->backendPath))
+		if(!is_dir($this->frontendPath) || !is_dir($this->backendPath) || $rVersion < 200)
 		{
 			echo "This is an older version of Fork. The Fork tool only works with V2+.\n";
 			echo "--------------------------------------------------------------------------------------------------\n";
