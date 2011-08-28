@@ -14,3 +14,11 @@ ft module modulename
 
 Let me explain this, ft stands for Fork Tool (the alias you just created)
 module stands for the fact of what you want to create, and modulename is the name of the module, obvious.
+
+Currently available options:
+
+ft module modulename
+ft action [frontend/backend] modulename actionname
+ft theme themename
+ft widget modulename widgetname
+ft show version

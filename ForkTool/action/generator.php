@@ -15,11 +15,13 @@ class ActionGenerator
 	 */
 	private $module, $actionname, $location, $workingDir, $filename;
 
+
 	/**
-	 * Start the widget generator
+	 * Start the action generator
 	 * E
 	 * @param 	string $module		The module name.
-	 * @param	string $this->module		The name the widget should have.
+	 * @param	string $location	The location the action should come.
+	 * @param	string $actionname	The name of the action.
 	 */
 	public function __construct($module, $location, $actionname)
 	{
@@ -46,6 +48,7 @@ class ActionGenerator
 		else echo "The action already exists.\n";
 	}
 
+
 	/**
 	 * Checks if the paths are right
 	 */
@@ -71,45 +74,6 @@ class ActionGenerator
 		}
 	}
 
-	/**
-	 * Creates a valid name
-	 *
-	 * @return	void
-	 */
-	private function createName()
-	{
-		// are there any underscores?
-		if(strpos($this->filename, '_') > 0)
-		{
-			// temporary string
-			$tempStr = '';
-
-			// temporary names
-			$tempNames = explode('_', $this->filename);
-
-			// uppercase it
-			foreach($tempNames as $name) $tempStr.= ucfirst($name);
-
-			// reassign
-			$this->actionname = $tempStr;
-		}
-		// no underscores
-		else $this->actionname = ucfirst($this->filename);
-	}
-
-	/**
-	 * Sets the right path to work in (frontend/backend)
-	 *
-	 * @return	void
-	 */
-	private function getWorkingDir()
-	{
-		// create temporary path
-		$tempPath = ($this->location == 'frontend') ? FRONTENDPATH : BACKENDPATH;
-
-		// set working dir
-		$this->workingDir = $tempPath . 'modules/';
-	}
 
 	/**
 	 * Create the action files
@@ -160,6 +124,34 @@ class ActionGenerator
 		$this->createTemplate();
 	}
 
+
+	/**
+	 * Creates a valid name
+	 *
+	 * @return	void
+	 */
+	private function createName()
+	{
+		// are there any underscores?
+		if(strpos($this->filename, '_') > 0)
+		{
+			// temporary string
+			$tempStr = '';
+
+			// temporary names
+			$tempNames = explode('_', $this->filename);
+
+			// uppercase it
+			foreach($tempNames as $name) $tempStr.= ucfirst($name);
+
+			// reassign
+			$this->actionname = $tempStr;
+		}
+		// no underscores
+		else $this->actionname = ucfirst($this->filename);
+	}
+
+
 	/**
 	 * Make the template file
 	 *
@@ -173,6 +165,21 @@ class ActionGenerator
 
 		// close files
 		fclose($acFile);
+	}
+
+
+	/**
+	 * Sets the right path to work in (frontend/backend)
+	 *
+	 * @return	void
+	 */
+	private function getWorkingDir()
+	{
+		// create temporary path
+		$tempPath = ($this->location == 'frontend') ? FRONTENDPATH : BACKENDPATH;
+
+		// set working dir
+		$this->workingDir = $tempPath . 'modules/';
 	}
 }
 
