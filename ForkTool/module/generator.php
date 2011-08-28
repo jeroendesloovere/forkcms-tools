@@ -16,10 +16,9 @@ class ModuleGenerator
 	private $module;
 
 	/**
-	 * Start the widget generator
+	 * Start the module generator
 	 * E
 	 * @param 	string $module		The module name.
-	 * @param	string $this->module		The name the widget should have.
 	 */
 	public function __construct($module)
 	{
@@ -57,6 +56,7 @@ class ModuleGenerator
 		else echo "The module already exists.\n";
 	}
 
+
 	/**
 	 * Build the backend
 	 *
@@ -74,6 +74,7 @@ class ModuleGenerator
 		mkdir(BACKENDPATH . 'modules/' . $this->module . '/layout/templates');
 	}
 
+
 	/**
 	 * Build the frontend
 	 *
@@ -88,6 +89,7 @@ class ModuleGenerator
 		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout');
 		mkdir(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates');
 	}
+
 
 	/**
 	 * Create action
@@ -127,74 +129,6 @@ class ModuleGenerator
 		fclose($fhModTemplate);
 	}
 
-	/**
-	 * Create model
-	 *
-	 * @return	void
-	 */
-	private function createModel()
-	{
-		// module template
-		$modTemplate = CLIPATH . 'module/bases/backend/model.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create model
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-
-
-		// module template
-		$modTemplate = CLIPATH . 'module/bases/frontend/model.php';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create model
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-	}
-
-	/**
-	 * Make names
-	 *
-	 * @return	void
-	 */
-	private function createTemplate()
-	{
-		// index action template
-		$modTemplate = CLIPATH . 'module/bases/backend/index.tpl';
-		$fhModTemplate = fopen($modTemplate, "r");
-		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
-		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
-		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
-
-		// create index template
-		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
-		fwrite($modFile, $tdModTemplate);
-
-		// close files
-		fclose($modFile);
-		fclose($fhModTemplate);
-
-		// create index template
-		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
-		fwrite($modFile, '');
-
-		// close file
-		fclose($modFile);
-	}
 
 	/**
 	 * Create config
@@ -233,6 +167,7 @@ class ModuleGenerator
 		fclose($modFile);
 		fclose($fhModTemplate);
 	}
+
 
 	/**
 	 * Create installer
@@ -276,6 +211,77 @@ class ModuleGenerator
 		fwrite($modFile, '');
 
 		// close files
+		fclose($modFile);
+	}
+
+
+	/**
+	 * Create model
+	 *
+	 * @return	void
+	 */
+	private function createModel()
+	{
+		// module template
+		$modTemplate = CLIPATH . 'module/bases/backend/model.php';
+		$fhModTemplate = fopen($modTemplate, "r");
+		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
+		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
+		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+
+		// create model
+		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
+		fwrite($modFile, $tdModTemplate);
+
+		// close files
+		fclose($modFile);
+		fclose($fhModTemplate);
+
+
+		// module template
+		$modTemplate = CLIPATH . 'module/bases/frontend/model.php';
+		$fhModTemplate = fopen($modTemplate, "r");
+		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
+		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
+		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+
+		// create model
+		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
+		fwrite($modFile, $tdModTemplate);
+
+		// close files
+		fclose($modFile);
+		fclose($fhModTemplate);
+	}
+
+
+	/**
+	 * Make names
+	 *
+	 * @return	void
+	 */
+	private function createTemplate()
+	{
+		// index action template
+		$modTemplate = CLIPATH . 'module/bases/backend/index.tpl';
+		$fhModTemplate = fopen($modTemplate, "r");
+		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
+		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
+		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+
+		// create index template
+		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
+		fwrite($modFile, $tdModTemplate);
+
+		// close files
+		fclose($modFile);
+		fclose($fhModTemplate);
+
+		// create index template
+		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/layout/templates/index.tpl', 'w');
+		fwrite($modFile, '');
+
+		// close file
 		fclose($modFile);
 	}
 }

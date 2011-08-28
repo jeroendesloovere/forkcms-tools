@@ -46,6 +46,7 @@ class WidgetGenerator
 		else echo "The widget already exists.\n";
 	}
 
+
 	/**
 	 * Create action
 	 *
@@ -73,6 +74,7 @@ class WidgetGenerator
 		fclose($fhWidTemplate);
 	}
 
+
 	/**
 	 * Creates a valid name
 	 *
@@ -95,13 +97,15 @@ class WidgetGenerator
 			// reassign
 			$this->name = $tempStr;
 		}
+		// no underscores
+		$this->name = ucfirst($this->filename);
 	}
 
+
 	/**
-	 * Make names (make _ to upercase
+	 * Make names (make _ to upercase)
 	 *
 	 * @return	void
-	 * @param	string $name	The given name.
 	 */
 	private function createTemplate()
 	{
