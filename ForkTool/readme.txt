@@ -1,19 +1,28 @@
-This needs to be installed via terminal.
+Installation:
 
-To install this, copy this folder to /usr/lib/php (if you cannot see it in finder, type: defaults write.com.apple AppleShowAllFiles TRUE)
+The installation procedure runs trough Terminal.
 
-Now in terminal type: alias ft=/usr/lib/php/ForkTool/ft.sh
+Start terminal and type:
 
-To use this permanently, type vi ~/.bash_profile and add the previous piece of code. (You can insert code by pressing i)
+# cd
+# mkdir .forktool
+# cd forktool
+# git clone -b forktool git@github.com:jelmersnoeck/tools.git
+# cd
+# vi .bash_profile
+// Add to the file (to type, press i, to save and exit press escape, type : followed by x)
+// Change your username!
+# alias ft=/Users/yourusername/.forktool/tools/ForkTool/ft.sh
+// save the file
+# source ~/.bash_profile
 
-Now quit vi (press escape, type : and enter wq) and type source ~/.bash_profile
+You can now start using ForkTool.
 
-To use this (currently you can only create modules) type:
+Using Forktool
 
-ft module modulename
+To use ForkTool, you need to be in a project direcotry. This can be in the start, for example Projects/Myproject, but this can also be somewhere inside Fork, for example Projects/Myproject/default_www/frontend/modules
 
-Let me explain this, ft stands for Fork Tool (the alias you just created)
-module stands for the fact of what you want to create, and modulename is the name of the module, obvious.
+Once you're in your project directory, you can start using the commandos.
 
 Currently available options:
 
