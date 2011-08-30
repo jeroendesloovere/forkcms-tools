@@ -1,4 +1,4 @@
-]<?php
+<?php
 
 /**
  * Fork NG CLI tool
@@ -27,6 +27,46 @@ class FT
 	 * @var	array
 	 */
 	private $argv;
+
+	/**
+	 * Adjust the settings
+	 *
+	 * @return	void
+	 * @param	string $setting		The name of the setting.
+	 * @param	string $value		The value of the setting.
+	 */
+	private function adjustSetting($setting, $value)
+	{
+		// open the settings file
+		$oSettings = fopen(CLIPATH . '.settings', 'r');
+		$rSettings = fread($oSettings, filesize(CLIPATH . '.settings'));
+
+		switch($setting)
+		{
+			case 'author':
+				// check if the value is right according to the coding standards
+				$match = preg_match('/([a-zA-Z]*)( )([a-zA-Z]*)( )(\<)([a-zA-Z0-9\.\-]{1,})(\@)([a-zA-Z0-9\.\-]{3,20})(\.)([a-z]{3,4})(\>)/', $value);
+
+				if($match) $rSettings = preg_replace('/#author=(.*);/', '#author=' . $value . ';', $rSettings);
+				else
+				{
+					echo "This is an invalid author input. It should be in the form of: First Name <email@provider.ext>\n";
+					return;
+				}
+			break;
+
+		}
+
+		// close the file
+		fclose($oSettings);
+
+		// write to the file
+		$wSettings = fopen(CLIPATH . '.settings', 'w');
+		fwrite($wSettings, $rSettings);
+
+		echo "Setting succesfully adjusted.\n";
+	}
+
 
 	/**
 	 * Create Widget
@@ -108,9 +148,6 @@ class FT
 
 		// get home directory
 		$this->getHomeDir();
-
-		// run the tool
-		$this->run();
 	}
 
 
@@ -132,8 +169,7 @@ class FT
 			if(!is_dir($this->workingDir . '/default_www') && !is_dir($this->workingDir . '/library'))
 			{
 				echo "This is not a valid Fork NG path. Please initiate in your home folder of your project. \n";
-				echo "--------------------------------------------------------------------------------------------------\n";
-				exit;
+				return;
 			}
 			// create working paths
 			$this->frontendPath = $this->workingDir . '/default_www/frontend/';
@@ -166,9 +202,8 @@ class FT
 		// check if the frontend and backend exist (old fork doesn't have this)
 		if(!is_dir($this->frontendPath) || !is_dir($this->backendPath) || $rVersion < 200)
 		{
-			echo "This is an older version of Fork. The Fork tool only works with V2+.\n";
-			echo "--------------------------------------------------------------------------------------------------\n";
-			exit;
+			echo"This is an older version of Fork. The Fork tool only works with V2+.\n";
+			return;
 		}
 
 		// create real cli path
@@ -178,6 +213,26 @@ class FT
 		define('CLIPATH', $this->cliPath);
 		define('FRONTENDPATH', $this->frontendPath);
 		define('BACKENDPATH', $this->backendPath);
+	}
+
+
+	/**
+	 * Load the settings
+	 *
+	 * @return	void
+	 */
+	private function loadSettings()
+	{
+		// open the settings file
+		$oSettings = fopen(CLIPATH . '.settings', 'r');
+		$rSettings = fread($oSettings, filesize(CLIPATH . '.settings'));
+
+		// author
+		$author = preg_match('/#author=(.*);/', $rSettings, $matches);
+		define('AUTHOR', $matches[1]);
+
+		// close the file
+		fclose($oSettings);
 	}
 
 
@@ -208,8 +263,7 @@ class FT
 				{
 					echo "We expect 2 parameters to create a widget. The module and the widget name. Example:\n";
 					echo "ft widget blog show_most_related\n";
-					echo "--------------------------------------------------------------------------------------------------\n";
-					exit;
+					return;
 				}
 				$this->createWidget($this->argv[2], $this->argv[3]);
 			break;
@@ -218,14 +272,13 @@ class FT
 				{
 					echo "We expect 3 parameters to create an action. The location, the module and the action name. Example:\n";
 					echo "ft action backend blog edit\n";
-					echo "--------------------------------------------------------------------------------------------------\n";
-					exit;
+					return;
 				}
 				$this->createAction($this->argv[3], $this->argv[2], $this->argv[4]);
 			break;
-			default:
-				echo "Not a valid action.\n";
-				exit;
+			case 'settings':
+				$this->adjustSetting($this->argv[2], $this->argv[3]);
+			break;
 		}
 	}
 
@@ -264,7 +317,17 @@ class FT
 		echo "--------------------------------------------------------------------------------------------------\n";
 
 		// are there any arguments given?
-		if(count($argv) < 3) exit;
+		if(count($argv) < 3)
+		{
+			$error = "Invalid arguments, you can use these: \n\n";
+			$error.= "-action		[place, module, actionname] Example: ft action frontend blog review\n";
+			$error.= "-module		[modulename] Example: ft module timetracker\n";
+			$error.= "-widget		[modul, widgetname] Example: ft widget timetracker user_overview\n";
+			$error.= "-theme		[themename] Example: ft theme triton\n";
+			$error.= "-show		[whattoshow] Example: ft show version\n";
+
+			echo $error;
+		}
 
 		// create fork tool
 		$ft = new self();
@@ -274,6 +337,11 @@ class FT
 
 		// execute the fork tool
 		$ft->execute();
+
+		$ft->loadSettings();
+
+		// run the tool
+		$ft->run();
 
 		echo "--------------------------------------------------------------------------------------------------\n";
 	}

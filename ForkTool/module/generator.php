@@ -104,6 +104,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create index action
 		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/actions/index.php', 'w');
@@ -119,6 +120,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create index action
 		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/actions/index.php', 'w');
@@ -143,6 +145,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create config
 		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/config.php', 'w');
@@ -158,6 +161,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create model
 		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/config.php', 'w');
@@ -182,6 +186,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create installer
 		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/installer/install.php', 'w');
@@ -197,6 +202,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create installer
 		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/installer/data/locale.xml', 'w');
@@ -228,6 +234,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create model
 		$modFile = fopen(BACKENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');
@@ -244,6 +251,7 @@ class ModuleGenerator
 		$tdModTemplate = fread($fhModTemplate, filesize($modTemplate));
 		$tdModTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdModTemplate);
 		$tdModTemplate = str_replace('tempname', $this->module, $tdModTemplate);
+		$tdModTemplate = str_replace('authorname', AUTHOR, $tdModTemplate);
 
 		// create model
 		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/engine/model.php', 'w');

@@ -64,6 +64,7 @@ class WidgetGenerator
 		$tdWidTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdWidTemplate);
 		$tdWidTemplate = str_replace('tempname', $this->module, $tdWidTemplate);
 		$tdWidTemplate = str_replace('wname', ucfirst($this->name), $tdWidTemplate);
+		$tdWidTemplate = str_replace('authorname', AUTHOR, $tdWidTemplate);
 
 		// create widget
 		$modFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/widgets/' . $this->filename . '.php', 'w');
@@ -119,6 +120,7 @@ class WidgetGenerator
 		$tdWidTemplate = str_replace('tempnameuc', ucfirst($this->module), $tdWidTemplate);
 		$tdWidTemplate = str_replace('tempname', $this->module, $tdWidTemplate);
 		$tdWidTemplate = str_replace('wname', ucfirst($this->name), $tdWidTemplate);
+		$tdWidTemplate = str_replace('authorname', AUTHOR, $tdWidTemplate);
 
 		// make new widget template and fill it
 		$widFile = fopen(FRONTENDPATH . 'modules/' . $this->module . '/layout/widgets/' . $this->filename . '.tpl', 'w');

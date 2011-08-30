@@ -57,9 +57,8 @@ class ActionGenerator
 		// check if the location is right
 		if($this->location != 'frontend' && $this->location != 'backend')
 		{
-			"Please specify if you want to create this action in the frontend or backend. \n";
-			echo "--------------------------------------------------------------------------------------------------\n";
-			exit;
+			$error = "Please specify if you want to create this action in the frontend or backend. \n";
+			FT::error($error);
 		}
 
 		// get the working dir
@@ -68,9 +67,8 @@ class ActionGenerator
 		// check if the module is set
 		if(!is_dir($this->workingDir . $this->module))
 		{
-			echo "This is not an existing module. \n";
-			echo "--------------------------------------------------------------------------------------------------\n";
-			exit;
+			$error = "This is not an existing module. \n";
+			FT::error($error);
 		}
 	}
 
@@ -111,6 +109,7 @@ class ActionGenerator
 		$fhRepFile = str_replace('actionname', strtolower($this->actionname), $fhRepFile);
 		$fhRepFile = str_replace('modulename', $this->module, $fhRepFile);
 		$fhRepFile = str_replace('extension', $extensionName, $fhRepFile);
+		$fhRepFile = str_replace('authorname', AUTHOR, $fhRepFile);
 
 		// create new file
 		$acFile = fopen($this->workingDir . $this->module . '/actions/' . $this->filename . '.php', 'w');

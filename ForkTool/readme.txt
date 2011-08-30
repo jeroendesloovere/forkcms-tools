@@ -20,9 +20,11 @@ You can now start using ForkTool.
 
 Using Forktool
 
-To use ForkTool, you need to be in a project direcotry. This can be in the start, for example Projects/Myproject, but this can also be somewhere inside Fork, for example Projects/Myproject/default_www/frontend/modules
+To use ForkTool, you need to be in a project direcotry. This can be in the start, for example Projects/Myproject, but this can also be somewhere inside Fork, for example Projects/Myproject/default_www/frontend/modules.
 
 Once you're in your project directory, you can start using the commandos.
+
+The first thing you should do, is set your name. This can be done by ft settings author 'Your Name <your@email.ext>'.
 
 Currently available options:
 

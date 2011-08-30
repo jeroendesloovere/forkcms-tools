@@ -6,7 +6,7 @@
  * @package		installer
  * @subpackage	tempname
  *
- * @author		Jelmer Snoeck <jelmer.snoeck@netlash.com>
+ * @author		authorname
  * @since		2.6.2
  */
 class tempnameucInstall extends ModuleInstaller
