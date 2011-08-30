@@ -6,7 +6,7 @@
  * @package		backend
  * @subpackage	tempname
  *
- * @author		Jelmer Snoeck <jelmer.snoeck@netlash.com>
+ * @author		authorname
  * @since		2.6.2
  */
 final class BackendtempnameucConfig extends BackendBaseConfig
