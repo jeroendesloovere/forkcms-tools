@@ -9,7 +9,7 @@
  * @author		authorname
  * @since		2.6.2
  */
-class classname extends extensionname
+class classname extends extension
 {
 	/**
 	 * Execute the action
