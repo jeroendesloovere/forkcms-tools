@@ -34,7 +34,7 @@ class classname extends extension
 	 *
 	 * @return	void
 	 */
-	private function parse()
+	protected function parse()
 	{
 	}
 }
