@@ -158,9 +158,14 @@ class ActionGenerator
 	 */
 	private function createTemplate()
 	{
+		// load the base file
+		$acBaseFile = CLIPATH . 'action/bases/' . $this->location . '/base.tpl';
+		$fhBaseFile = fopen($acBaseFile, "r");
+		$frBaseFile = fread($fhBaseFile, filesize($acBaseFile));
+
 		// create index template
 		$acFile = fopen($this->workingDir . $this->module . '/layout/templates/' . $this->filename . '.tpl', 'w');
-		fwrite($acFile, '');
+		fwrite($acFile, $frBaseFile);
 
 		// close files
 		fclose($acFile);
