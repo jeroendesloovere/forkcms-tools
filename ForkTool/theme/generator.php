@@ -76,43 +76,6 @@ class ThemeGenerator
 		// close file
 		fclose($oCSS);
 
-		// create template files
-		$oTemp = fopen(FRONTENDPATH . 'themes/' . $this->themename . '/core/layout/templates/footer.tpl', 'w');
-		fwrite($oTemp, '');
-
-		// close file
-		fclose($oTemp);
-
-		// read base file
-		$oBase = fopen(CLIPATH . 'theme/bases/head.tpl', 'r');
-		$rBase = fread($oBase, filesize(CLIPATH . 'theme/bases/head.tpl'));
-		$rBase = str_replace('themename', $this->themename, $rBase);
-
-		// create template files
-		$oTemp = fopen(FRONTENDPATH . 'themes/' . $this->themename . '/core/layout/templates/head.tpl', 'w');
-		fwrite($oTemp, $rBase);
-
-		// close file
-		fclose($oTemp);
-		fclose($oBase);
-
-		// read base file
-		$oBase = fopen(CLIPATH . 'theme/bases/default.tpl', 'r');
-		$rBase = fread($oBase, filesize(CLIPATH . 'theme/bases/default.tpl'));
-		$rBase = str_replace('themename', $this->themename, $rBase);
-
-		// create default
-		$oTemp = fopen(FRONTENDPATH . 'themes/' . $this->themename . '/core/layout/templates/default.tpl', 'w');
-		fwrite($oTemp, $rBase);
-
-		// create template files
-		$oTemp = fopen(FRONTENDPATH . 'themes/' . $this->themename . '/core/layout/templates/home.tpl', 'w');
-		fwrite($oTemp, $rBase);
-
-		// close file
-		fclose($oTemp);
-		fclose($oBase);
-
 		// reade base javascript
 		$oBase = fopen(CLIPATH . 'theme/bases/html5.js', 'r');
 		$rBase = fread($oBase, filesize(CLIPATH . 'theme/bases/html5.js'));
@@ -123,6 +86,16 @@ class ThemeGenerator
 
 		// close file
 		fclose($oTemp);
+
+		// copy the triton files to the new dir
+		$tritonPath = FRONTENDPATH . 'themes/triton/core/layout/templates/';
+		$themePath = FRONTENDPATH . 'themes/' . $this->themename . '/core/layout/templates/';
+
+		// copy the files
+		copy($tritonPath . 'default.tpl', $themePath . 'default.tpl');
+		copy($tritonPath . 'footer.tpl', $themePath . 'footer.tpl');
+		copy($tritonPath . 'head.tpl', $themePath . 'head.tpl');
+		copy($tritonPath . 'home.tpl', $themePath . 'home.tpl');
 	}
 }
 
