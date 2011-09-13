@@ -86,6 +86,7 @@ class WidgetGenerator
 		// are there any underscores?
 		if(strpos($this->filename, '_') > 0)
 		{
+			echo strpos($this->filename, '_');
 			// temporary string
 			$tempStr = '';
 
@@ -98,8 +99,6 @@ class WidgetGenerator
 			// reassign
 			$this->name = $tempStr;
 		}
-		// no underscores
-		$this->name = ucfirst($this->filename);
 	}
 
 
