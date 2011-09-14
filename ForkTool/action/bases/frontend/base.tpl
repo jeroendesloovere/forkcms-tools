@@ -1,0 +1,3 @@
+{*
+	variables that are available:
+*}
