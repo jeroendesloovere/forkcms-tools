@@ -21,11 +21,26 @@ class FrontendtempnameucWidgetwname extends FrontendBaseWidget
 		// call parent
 		parent::execute();
 
+		// load the data
+		$this->loadData();
+
 		// load template
 		$this->loadTemplate();
 
 		// parse
 		$this->parse();
+	}
+
+
+	/**
+	 * Load the data
+	 *
+	 * @return	void
+	 */
+	private function loadData()
+	{
+		// get the data
+		$this->data = false;
 	}
 
 
@@ -36,7 +51,8 @@ class FrontendtempnameucWidgetwname extends FrontendBaseWidget
 	 */
 	private function parse()
 	{
-
+		// assign the data
+		$this->tpl->assign('wname', $this->data);
 	}
 }
 
