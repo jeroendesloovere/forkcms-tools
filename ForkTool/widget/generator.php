@@ -86,7 +86,6 @@ class WidgetGenerator
 		// are there any underscores?
 		if(strpos($this->filename, '_') > 0)
 		{
-			echo strpos($this->filename, '_');
 			// temporary string
 			$tempStr = '';
 
