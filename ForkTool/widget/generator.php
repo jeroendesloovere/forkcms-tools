@@ -83,6 +83,9 @@ class WidgetGenerator
 	 */
 	private function createName()
 	{
+		// set name first
+		$this->name = ucfirst($this->filename);
+
 		// are there any underscores?
 		if(strpos($this->filename, '_') > 0)
 		{
